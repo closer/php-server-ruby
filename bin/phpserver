@@ -1,0 +1,42 @@
+#!/usr/bin/env ruby
+
+require "optparse"
+require "php-server"
+
+type = ""
+
+option = {
+  :DocumentRoot => './',
+  :Port         => 3000,
+  :PHPPath      => '/usr/local/bin'
+}
+
+opt = OptionParser.new
+opt.on('-d VAL', '--dir=VAL')  {|v| option[:DocumentRoot] = v }
+opt.on('-p VAL', '--port=VAL') {|v| option[:Port] = v.to_i }
+opt.on('-t VAL', '--type=VAL') {|v| type = v }
+
+opt.order! ARGV
+type = ARGV.shift; opt.parse! ARGV unless ARGV.empty?
+
+case type
+when 'fuelphp', 'fuel'
+  option[:DocumentRoot] = './public'
+when 'cakephp', 'cake'
+  option[:DocumentRoot] = './app/webroot'
+end
+
+s = PHPServer.new option
+
+case type
+when 'fuelphp', 'fuel'
+  s.rewrite /\/(?<url>assets.*)/, '/\k<url>'
+  s.rewrite /\/(?<url>.*)/, '/index.php/\k<url>'
+when 'cakephp', 'cake'
+  s.rewrite /\/(?<url>(css|js|img|files).*)/, '/\k<url>'
+  s.rewrite /\/(?<url>.*)/, '/index.php'
+end
+
+trap('INT') { s.shutdown }
+
+s.start

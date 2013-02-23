@@ -5,11 +5,11 @@ require 'php-server/version'
 
 Gem::Specification.new do |gem|
   gem.name          = "php-server"
-  gem.version       = Php::Server::VERSION
+  gem.version       = PHPServer::VERSION
   gem.authors       = ["Eido NABESHIMA"]
   gem.email         = ["closer009@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{Webrick server: PHP mounted}
+  gem.summary       = %q{Webrick server: PHP mounted}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($/)
