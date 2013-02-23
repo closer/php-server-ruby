@@ -18,7 +18,9 @@ require 'webrick/config'
 require 'webrick/httpservlet/abstract'
 
 module PHPServer
-  class PHPHandler < WEBrick::HTTPServlet::AbstractServlet
+  include WEBrick::HTTPServlet
+
+  class PHPHandler < AbstractServlet
     PHPCGI = 'php-cgi'
 
     def initialize(server, name)
