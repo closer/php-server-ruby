@@ -6,7 +6,7 @@ module PHPServer
     def initialize *arg
       @rewrite_rules = []
       super
-      mount '/', WEBrick::HTTPServlet::FileHandler, config[:DocumentRoot], :FancyIndexing => true, :HandlerTable => { 'php' => WEBrick::HTTPServlet::PHPHandler }
+      mount '/', WEBrick::HTTPServlet::FileHandler, config[:DocumentRoot], :FancyIndexing => true, :HandlerTable => { 'php' => PHPServer::PHPHandler }
     end
 
     def rewrite pattern, subst
