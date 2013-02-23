@@ -14,13 +14,14 @@
 
 require 'rbconfig'
 require 'tempfile'
+require 'webrick'
 require 'webrick/config'
 require 'webrick/httpservlet/abstract'
 
 module PHPServer
-  include WEBrick::HTTPServlet
+  include WEBrick
 
-  class PHPHandler < AbstractServlet
+  class PHPHandler < HTTPServlet::AbstractServlet
     PHPCGI = 'php-cgi'
 
     def initialize(server, name)
@@ -64,11 +65,11 @@ module PHPServer
 
       data = "" unless data
       raw_header, body = data.split(/^[\xd\xa]+/, 2)
-      raise HTTPStatus::InternalServerError,
+      raise WEBrick::HTTPStatus::InternalServerError,
             "PHPHandler: Premature end of script headers: #{@script_filename}" if body.nil?
 
       begin
-        header = HTTPUtils::parse_header(raw_header)
+        header = WEBrick::HTTPUtils::parse_header(raw_header)
         if /^(\d+)/ =~ header['status'][0]
           res.status = $1.to_i
           header.delete('status')
@@ -85,7 +86,7 @@ module PHPServer
         end
         header.each { |key, val| res[key] = val.join(", ") }
       rescue => ex
-        raise HTTPStatus::InternalServerError, ex.message
+        raise WEBrick::HTTPStatus::InternalServerError, ex.message
       end
       res.body = body
     end

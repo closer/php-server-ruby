@@ -2,7 +2,9 @@ require 'webrick'
 require 'php-server/phphandler'
 
 module PHPServer
-  class HTTPServer < WEBrick::HTTPServer
+  include WEBrick
+
+  class HTTPServer < HTTPServer
     def initialize *arg
       @rewrite_rules = []
       super
