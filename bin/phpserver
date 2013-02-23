@@ -26,7 +26,7 @@ when 'cakephp', 'cake'
   option[:DocumentRoot] = './app/webroot'
 end
 
-s = PHPServer.new option
+s = PHPServer::HTTPServer.new option
 
 case type
 when 'fuelphp', 'fuel'
