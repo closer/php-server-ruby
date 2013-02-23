@@ -80,7 +80,7 @@ module PHPServer
         end
         if header.has_key?('set-cookie')
           header['set-cookie'].each { |k|
-            res.cookies << Cookie.parse_set_cookie(k)
+            res.cookies << WEBrick::Cookie.parse_set_cookie(k)
           }
           header.delete('set-cookie')
         end
