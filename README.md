@@ -1,4 +1,4 @@
-# Php::Server
+# PHPServer
 
 TODO: Write a gem description
 
