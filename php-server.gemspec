@@ -8,9 +8,9 @@ Gem::Specification.new do |gem|
   gem.version       = PHPServer::VERSION
   gem.authors       = ["Eido NABESHIMA"]
   gem.email         = ["closer009@gmail.com"]
-  gem.description   = %q{Webrick server: PHP mounted}
-  gem.summary       = %q{Webrick server: PHP mounted}
-  gem.homepage      = ""
+  gem.description   = %q{Simple PHP server for development.}
+  gem.summary       = %q{Simple PHP server for development.}
+  gem.homepage      = "https://github.com/closer/php-server"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
