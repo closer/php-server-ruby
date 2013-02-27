@@ -1,6 +1,6 @@
 # PHPServer
 
-TODO: Write a gem description
+Simple PHP server for development.
 
 ## Installation
 
@@ -18,7 +18,19 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+    $ phpserver
+
+### CakePHP
+
+    $ phpserver cakephp
+
+### FuelPHP
+
+    $ phpserver fuelphp
+
+## Required
+
+* php-cgi
 
 ## Contributing
 
