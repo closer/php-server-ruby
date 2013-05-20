@@ -41,6 +41,8 @@ module PHPServer
       if /mswin|bccwin|mingw/ =~ RUBY_PLATFORM
         meta["SystemRoot"] = ENV["SystemRoot"]
       end
+      meta["HTTP_SERVER_PORT"] = meta["SERVER_PORT"]
+      meta["REQUEST_URI"] = meta["REQUEST_URI"].gsub /^https?:\/\/[^\/]+/, ''
       ENV.update(meta)
 
       cgi_in = IO::popen(@phpcmd, "r+b")
