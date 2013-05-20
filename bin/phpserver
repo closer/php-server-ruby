@@ -5,18 +5,13 @@ require "php-server"
 
 type = ""
 
-php_configfile = 'Phpfile'
+php_configfile = '.rewriterule'
 
 option = {
   :DocumentRoot => './',
   :Port         => 3000,
   :PHPPath      => '/usr/local/bin'
 }
-
-if File.exists php_configfile
-  config = File.read php_configfile
-  eval config
-end
 
 opt = OptionParser.new
 opt.on('-d VAL', '--dir=VAL')  {|v| option[:DocumentRoot] = v }
@@ -34,6 +29,11 @@ when 'cakephp', 'cake'
 end
 
 s = PHPServer::HTTPServer.new option
+
+if File.exists php_configfile
+  config = File.read php_configfile
+  s.instance_eval config
+end
 
 case type
 when 'fuelphp', 'fuel'
