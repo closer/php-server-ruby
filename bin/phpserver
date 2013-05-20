@@ -30,7 +30,7 @@ end
 
 s = PHPServer::HTTPServer.new option
 
-if File.exists php_configfile
+if File.exist? php_configfile
   config = File.read php_configfile
   s.instance_eval config
 end
