@@ -23,11 +23,13 @@ module PHPServer
 
   class PHPHandler < HTTPServlet::AbstractServlet
     PHPCGI = 'php-cgi'
+    PHPFPM = 'php-fpm'
 
     def initialize(server, name)
       super(server, name)
-      @phpcmd = File.join(@server[:PHPPath], PHPCGI)
+      @phpcmd = [PHPFPM, PHPCGI].map{|bin| File.join(@server[:PHPPath], bin) }.detect{|path| File.exist?(path) }
       @php_fullpath_script = name
+      @logger.info("phpcmd: #{@phpcmd}")
     end
 
     def do_GET(req, res)
@@ -36,7 +38,6 @@ module PHPServer
 
       meta = req.meta_vars
       meta["SCRIPT_FILENAME"] = @php_fullpath_script
-      meta["PATH"] = @config[:PHPPath]
       meta["REDIRECT_STATUS"] = "200" # php-cgi/apache specific value
       if /mswin|bccwin|mingw/ =~ RUBY_PLATFORM
         meta["SystemRoot"] = ENV["SystemRoot"]
@@ -45,7 +46,7 @@ module PHPServer
       meta["REQUEST_URI"] = meta["REQUEST_URI"].gsub /^https?:\/\/[^\/]+/, ''
       ENV.update(meta)
 
-      cgi_in = IO::popen(@phpcmd, "r+b")
+      cgi_in = IO::popen(ENV, @phpcmd, "r+b")
       begin
         cgi_in.sync = true
 
