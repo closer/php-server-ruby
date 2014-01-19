@@ -46,18 +46,20 @@ module PHPServer
       meta["REQUEST_URI"] = meta["REQUEST_URI"].gsub /^https?:\/\/[^\/]+/, ''
       ENV.update(meta)
 
-      cgi_in = IO::popen(ENV, @phpcmd, "r+b")
+      require "open3"
+      stdin, stdout, stderr, thr = Open3.popen3(ENV, @phpcmd)
       begin
-        cgi_in.sync = true
+        stdin.sync = true
 
         if req.body and req.body.bytesize > 0
-          cgi_in.write(req.body)
+          stdin.write(req.body)
         end
-        cgi_in.close_write
+        stdin.close
       ensure
-        data = cgi_in.read
-        cgi_in.close_read
-        status = $?.exitstatus
+        data = stdout.read
+        stdout.close
+        stderr.close
+        status = thr.value
         sleep 0.1 if /mswin|bccwin|mingw/ =~ RUBY_PLATFORM
       end
 
